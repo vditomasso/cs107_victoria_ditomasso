@@ -18,7 +18,7 @@ read -r -p 'Y/N? ' YNvar1
 if [[ $YNvar1 = 'Y' ]]
 then
     read -r -p 'Enter commit message: ' commitvar
-    git commit -m $commitvar
+    git commit -m "$commitvar"
 # if N, exit
 elif [[ $YNvar1 = 'N' ]]
 then

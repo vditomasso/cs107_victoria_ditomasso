@@ -17,7 +17,7 @@ The "Homework Setup" text below has been copied from the 2020-CS107 [Course Work
     * P1.py, P2.py, P3.py, P4.py
     * Each file should run and return the required output.
 
-#### Github Branch Organization
+#### Branch Organization
 
 |Master Branch|HW#-dev Branch|
 |:---|:---|

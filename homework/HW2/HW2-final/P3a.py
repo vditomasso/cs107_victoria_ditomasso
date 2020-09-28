@@ -7,6 +7,7 @@ def make_withdrawal(balance):
             print('Insufficient funds')
         else:
             new_bal = balance - withdrawal_amount
+            print(new_bal)
             return(new_bal)
         
     return(withdraw)

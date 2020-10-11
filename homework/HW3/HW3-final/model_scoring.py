@@ -9,10 +9,10 @@ dataset = datasets.load_boston()
 X_train, X_test, y_train, y_test = train_test_split(dataset['data'],dataset['target'],test_size=0.2,random_state=42)
 
 alpha=0.1
-models = [OLS(), RR()]
+models = [OLS(alpha), RR(alpha)]
 
 for model in models:
-    model.fit(X_train, y_train, alpha=alpha)
+    model.fit(X_train, y_train)
     score = model.score(X_test, y_test)
     best_params = model.get_params()
     print('R2=',score,' params=',best_params)

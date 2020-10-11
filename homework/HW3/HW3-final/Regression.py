@@ -4,11 +4,11 @@ import numpy as np
 
 class Regression():
 
-    def __init__(self):
+    def __init__(self, alpha):
         # Initializes an empty dictionary called params
-        self.params = {}
+        self.params = {'alpha':alpha}
 
-    def fit(self, X, y, alpha):
+    def fit(self, X, y):
         # Fits a linear model to X and y. It stores best-fit parameters in the dictionary attribute called params. The first key should be the coefficients (not including the intercept) and the second key should be the intercept.
         raise NotImplementedError
 
@@ -34,7 +34,7 @@ class Regression():
 
 class LinearRegression(Regression):
 
-    def fit(self, X, y, alpha=0.5):
+    def fit(self, X, y):
         X_transpose = X.transpose()
         term1 = np.dot(X_transpose,X)
         term1_inv = np.linalg.pinv(term1)
@@ -44,9 +44,12 @@ class LinearRegression(Regression):
 
 class RidgeRegression(Regression):
 
-    def fit(self, X, y, alpha):
+#    def __init__(self,alpha):
+#        super().__init__(alpha)
+
+    def fit(self, X, y):
         I = np.identity(X.shape[1])
-        gamma = alpha*I
+        gamma = self.params['alpha']*I
         X_transpose = X.transpose()
         gamma_transpose = gamma.transpose()
         X_term = np.dot(X_transpose,X)
@@ -57,16 +60,16 @@ class RidgeRegression(Regression):
         best_fit_coeff = np.dot(term1,y)
         self.params['coeff'] = best_fit_coeff
 
-#from sklearn.datasets import load_boston
-#X, y = load_boston(return_X_y=True)
+from sklearn.datasets import load_boston
+X, y = load_boston(return_X_y=True)
 
 #test_reg = Regression()
 #test_reg.fit(X,y)
 
-#test_lin=RidgeRegression()
-#test_lin.fit(X,y,0.1)
-#print(test_lin.get_params())
-#print(test_lin.score(X,y))
+test_lin=RidgeRegression(0.1)
+test_lin.fit(X,y)
+print(test_lin.get_params())
+print(test_lin.score(X,y))
 
 # Here are the working regression functions, not implemented into the class
 # FOR THIS CLASS AND THE RIDGEREGRESSION CLASS, INSTEAD OF HAVING AN INTERNAL FUNCTION WITH INPUTS, JUST INITIALIZE USING THE ATTRIBUTES OF THE CLASS

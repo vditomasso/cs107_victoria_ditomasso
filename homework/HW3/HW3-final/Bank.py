@@ -2,7 +2,6 @@
 
 from enum import Enum
 
-# Not sure that this should be here:
 class AccountType(Enum):
     SAVINGS = 1
     CHECKING = 2
@@ -103,5 +102,3 @@ class BankUser():
         else:
             checking_info = "and no checking account"
         return(owner_info + savings_info + checking_info)
-        
-

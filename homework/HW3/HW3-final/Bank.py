@@ -39,53 +39,52 @@ class BankUser():
     
     def __init__(self, owner):
         self.owner = owner
-        self.account = BankAccount(owner, None)
         self.savingsAccount = None
         self.checkingAccount = None
     
     def addAccount(self, accountType):
-        if accountType == 1:
+        if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
                 self.savingsAccount = BankAccount(self.owner, accountType)
             else:
                 raise Exception('This owner already has a savings account')
-        if accountType == 2:
+        if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
                 self.checkingAccount = BankAccount(self.owner, accountType)
             else:
                 raise Exception('This owner already has a checking account')
         
     def getBalance(self, accountType):
-        if accountType == 1:
+        if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
                 raise Exception('This owner does not have a savings account')
             else:
                 return(self.savingsAccount.balance)
-        if accountType == 2:
+        if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
                 raise Exception('This owner does not have a checking account')
             else:
                 return(self.checkingAccount.balance)
     
     def deposit(self, accountType, amount):
-        if accountType == 1:
+        if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
                 raise Exception('This owner does not have a savings account')
             else:
                 self.savingsAccount.deposit(amount)
-        if accountType == 2:
+        if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
                 raise Exception('This owner does not have a checking account')
             else:
                 self.checkingAccount.deposit(amount)
 
     def withdraw(self, accountType, amount):
-        if accountType == 1:
+        if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
                 raise Exception('This owner does not have a savings account')
             else:
                 self.savingsAccount.withdraw(amount)
-        if accountType == 2:
+        if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
                 raise Exception('This owner does not have a checking account')
             else:
@@ -94,11 +93,12 @@ class BankUser():
     def __str__(self):
         owner_info = "{} ".format(self.owner)
         if self.savingsAccount!=None:
-            savings_info = "has a savings account, balance: {} ".format(self.getBalance(1))
+            savings_info = "has a savings account, balance: {} ".format(self.savingsAccount.balance)
         else:
             savings_info = "has no savings account "
         if self.checkingAccount != None:
-            checking_info = "and a checking account, balance: {} ".format(self.getBalance(2))
+            checking_info = "and a checking account, balance: {} ".format(self.checkingAccount.balance)
         else:
             checking_info = "and no checking account"
         return(owner_info + savings_info + checking_info)
+

@@ -14,23 +14,23 @@ class BankAccount():
         self.balance = balance
     
     def withdraw(self, amount):
-        if amount > self.balance:
+        if int(amount) > self.balance:
             raise Exception('Insufficient funds')
-        elif amount<0:
+        elif int(amount)<0:
             raise Exception('Cannot withdraw a negative amount')
         else:
-            new_bal = self.balance - amount
+            new_bal = self.balance - int(amount)
             self.balance = new_bal
 
     def deposit(self, amount):
-        if amount<0:
+        if int(amount)<0:
             raise Exception('Cannot deposit a negative amount')
         else:
-            new_bal = self.balance + amount
+            new_bal = self.balance + int(amount)
             self.balance = new_bal
 
     def __str__(self):
-        return "Account owner: {}, Type of account: {}".format(self.owner, AccountType(self.accountType).name)
+        return 'Account owner: {}, Type of account: {}'.format(self.owner, AccountType(self.accountType).name)
     
     def __len__(self):
         return(int(self.balance))
@@ -91,13 +91,86 @@ class BankUser():
                 self.checkingAccount.withdraw(amount)
 
     def __str__(self):
-        owner_info = "{} ".format(self.owner)
+        owner_info = '{} '.format(self.owner)
         if self.savingsAccount!=None:
-            savings_info = "has a savings account, balance: {} ".format(self.savingsAccount.balance)
+            savings_info = 'has a savings account, balance: {} '.format(self.savingsAccount.balance)
         else:
-            savings_info = "has no savings account "
+            savings_info = 'has no savings account '
         if self.checkingAccount != None:
-            checking_info = "and a checking account, balance: {} ".format(self.checkingAccount.balance)
+            checking_info = 'and a checking account, balance: {} '.format(self.checkingAccount.balance)
         else:
-            checking_info = "and no checking account"
+            checking_info = 'and no checking account'
         return(owner_info + savings_info + checking_info)
+
+### ATM Closure Function ###
+def ATMSession(bankUser):
+    def Interface():
+        prompt1=input('Enter Options: \n1)Exit \n2)Create Account \n3)Check Balance \n4)Deposit \n5)Withdraw \n')
+        
+        if prompt1=='1':
+            return
+        
+        elif prompt1=='2': # Create an account
+            prompt2=input('Enter Options: \n1)Checking \n2)Savings \n')
+            if prompt2=='1': # Checking
+                bankUser.addAccount(AccountType.CHECKING)
+                print('You have created a checking account for {}.'.format(bankUser.owner))
+                Interface()
+            elif prompt2=='2': # Savings
+                bankUser.addAccount(AccountType.SAVINGS)
+                print('You have created a savings account for {}.'.format(bankUser.owner))
+                Interface()
+            else:
+                print('\"{}\" is not an acceptable input. Please try again, or press 1 to Exit.'.format(prompt2))
+                Interface()
+                
+        elif prompt1=='3': # Check balance
+            prompt2=input('Enter Options: \n1)Checking \n2)Savings \n')
+            if prompt2=='1': # Checking
+                print('{}\'s checking account balance is: ${}'.format(bankUser.owner,bankUser.getBalance(AccountType.CHECKING)))
+                Interface()
+            elif prompt2=='2': # Savings
+                print('{}\'s savings account balance is: ${}'.format(bankUser.owner,bankUser.getBalance(AccountType.SAVINGS)))
+                Interface()
+            else:
+                print('\"{}\" is not an acceptable input. Please try again, or press 1 to Exit.'.format(prompt2))
+                Interface()
+
+        elif prompt1=='4': # Deposit
+            prompt2=input('Enter Options: \n1)Checking \n2)Savings \n')
+            if prompt2=='1': # Checking
+                amount=input('Enter Integer Amount, Cannot Be Negative: \n')
+                bankUser.deposit(AccountType.CHECKING, amount)
+                print('You have deposited ${} into {}\'s checking account.'.format(amount, bankUser.owner))
+                Interface()
+            elif prompt2=='2': # Savings
+                amount=input('Enter Integer Amount, Cannot Be Negative: \n')
+                bankUser.deposit(AccountType.SAVINGS, amount)
+                print('You have deposited ${} into {}\'s savings account.'.format(amount, bankUser.owner))
+                Interface()
+            else:
+                print('\"{}\" is not an acceptable input. Please try again, or press 1 to Exit.'.format(prompt2))
+                Interface()
+
+        elif prompt1=='5': # Withdraw
+            prompt2=input('Enter Options: \n1)Checking \n2)Savings \n')
+            if prompt2=='1': # Checking
+                amount=input('Enter Integer Amount, Cannot Be Negative: \n')
+                bankUser.withdraw(AccountType.CHECKING, amount)
+                print('You have withdrawn ${} from {}\'s checking account.'.format(amount, bankUser.owner))
+                Interface()
+            elif prompt2=='2': # Savings
+                amount=input('Enter Integer Amount, Cannot Be Negative: \n')
+                bankUser.withdraw(AccountType.SAVINGS, amount)
+                print('You have withdrawn ${} from {}\'s savings account.'.format(amount, bankUser.owner))
+                Interface()
+            else:
+                print('\"{}\" is not an acceptable input. Please try again, or press 1 to Exit.'.format(prompt2))
+                Interface()
+       
+        else:
+            print('\"{}\" is not an acceptable input. Please try again, or press 1 to Exit.'.format(prompt1))
+            Interface()
+       
+    return Interface
+

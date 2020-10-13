@@ -2,7 +2,6 @@
 
 from Bank import BankUser
 from Bank import AccountType
-from enum import Enum
 
 def test_over_withdrawal(): #this test function should throw an Exception or Error
     user = BankUser("Joe");

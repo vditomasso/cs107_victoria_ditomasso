@@ -57,36 +57,36 @@ class BankUser():
     def getBalance(self, accountType):
         if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
-                raise Exception('This owner does not have a savings account')
+                raise Exception('Cannot get balance: This owner does not have a savings account')
             else:
                 return(self.savingsAccount.balance)
         if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
-                raise Exception('This owner does not have a checking account')
+                raise Exception('Cannot get balance: This owner does not have a checking account')
             else:
                 return(self.checkingAccount.balance)
     
     def deposit(self, accountType, amount):
         if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
-                raise Exception('This owner does not have a savings account')
+                raise Exception('Cannot make a deposit: This owner does not have a savings account')
             else:
                 self.savingsAccount.deposit(amount)
         if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
-                raise Exception('This owner does not have a checking account')
+                raise Exception('Cannot make a deposit: This owner does not have a checking account')
             else:
                 self.checkingAccount.deposit(amount)
 
     def withdraw(self, accountType, amount):
         if accountType == AccountType.SAVINGS:
             if self.savingsAccount == None:
-                raise Exception('This owner does not have a savings account')
+                raise Exception('Cannot withdraw funds: This owner does not have a savings account')
             else:
                 self.savingsAccount.withdraw(amount)
         if accountType == AccountType.CHECKING:
             if self.checkingAccount == None:
-                raise Exception('This owner does not have a checking account')
+                raise Exception('Cannot withdraw funds: This owner does not have a checking account')
             else:
                 self.checkingAccount.withdraw(amount)
 
@@ -101,4 +101,3 @@ class BankUser():
         else:
             checking_info = "and no checking account"
         return(owner_info + savings_info + checking_info)
-

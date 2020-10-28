@@ -24,3 +24,7 @@ class Animal:
 
     def __repr__(self):
         return f'{self.name} ({self._species})'
+        
+    @property
+    def species(self):
+        return(self._species)

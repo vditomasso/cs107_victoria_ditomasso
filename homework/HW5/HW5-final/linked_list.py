@@ -28,7 +28,7 @@ class LinkedList:
         return self._head if i == 0 else self._tail[i-1]
 
     def prepend(self, val):
-        pass # TODO
+        return(LinkedList(val,self))
 
     def append(self, val):
         # Make a new node with the value as the head and Nil as the tail, since it will be the new end of the linked list
@@ -78,11 +78,10 @@ class Nil():
         pass # TODO
 
 ### Testing ###
-ll = LinkedList(1,LinkedList('a',Nil()))
+ll = LinkedList(3,LinkedList('a',Nil()))
 print(ll)
-ll2 = ll.append(2)
+ll2 = ll.prepend(2)
 print(ll2)
-#ll2 = LinkedList(1,LinkedList(2,Nil()))
-ll3 = ll2.append(3)
+ll3 = ll2.prepend(1)
 print(ll3)
 

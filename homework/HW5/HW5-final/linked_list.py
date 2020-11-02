@@ -31,7 +31,12 @@ class LinkedList:
         pass # TODO
 
     def append(self, val):
-        pass # TODO
+        # Make a new node with the value as the head and Nil as the tail, since it will be the new end of the linked list
+        new_node = Nil().append(val)
+        for i in reversed(range(len(self))):
+            new_node = LinkedList(ll[i],new_node)
+        self._head = new_node.head
+        self._tail = new_node.tail
 
     def for_each(self, fun):
         pass # TODO
@@ -72,3 +77,12 @@ class Nil():
 
     def for_each(self, fun):
         pass # TODO
+
+### Testing ###
+ll = LinkedList(1,Nil())
+print(ll)
+ll.append(2)
+print(ll)
+ll.append(3)
+print(ll)
+

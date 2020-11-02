@@ -78,7 +78,7 @@ class Nil():
         return LinkedList(val, Nil())
 
     def for_each(self, fun):
-        pass # TODO
+        return(self)
 
 ### Testing ###
 l = Nil().prepend(1).prepend(2).prepend(3).prepend(4)

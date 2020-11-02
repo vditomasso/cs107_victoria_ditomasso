@@ -38,7 +38,10 @@ class LinkedList:
         return(new_node)
 
     def for_each(self, fun):
-        pass # TODO
+        new_node = Nil()
+        for i in reversed(range(len(self))):
+            new_node = new_node.prepend(fun(self[i]))
+        return(new_node)
 
     def summation(self):
         return self._head + self._tail.summation() if self._tail else self._head
@@ -78,18 +81,8 @@ class Nil():
         pass # TODO
 
 ### Testing ###
-#ll = LinkedList(3,LinkedList('a',Nil()))
-#print(ll)
-#ll2 = ll.prepend(2)
-#print(ll2)
-#ll3 = ll2.prepend(1)
-#print(ll3)
-#print(len(ll3))
-#print(ll3.head)
-#print(ll3.tail)
-
-#n = Nil()
-#n1 = n.prepend(1)
-#print(n1)
-#n2 = n.append(2)
-#print(n2)
+l = Nil().prepend(1).prepend(2).prepend(3).prepend(4)
+def square(x):
+    return x**2
+print(l)
+print(l.for_each(square))

@@ -69,7 +69,7 @@ class Nil():
         return False
 
     def prepend(self, val):
-        pass # TODO
+        return(LinkedList(val,self))
 
     def append(self, val):
         return LinkedList(val, Nil())
@@ -78,10 +78,18 @@ class Nil():
         pass # TODO
 
 ### Testing ###
-ll = LinkedList(3,LinkedList('a',Nil()))
-print(ll)
-ll2 = ll.prepend(2)
-print(ll2)
-ll3 = ll2.prepend(1)
-print(ll3)
+#ll = LinkedList(3,LinkedList('a',Nil()))
+#print(ll)
+#ll2 = ll.prepend(2)
+#print(ll2)
+#ll3 = ll2.prepend(1)
+#print(ll3)
+#print(len(ll3))
+#print(ll3.head)
+#print(ll3.tail)
 
+#n = Nil()
+#n1 = n.prepend(1)
+#print(n1)
+#n2 = n.append(2)
+#print(n2)

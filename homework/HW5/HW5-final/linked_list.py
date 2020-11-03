@@ -79,18 +79,3 @@ class Nil():
     def for_each(self, fun):
         return(self)
 
-### Testing ###
-
-# Testing reduce_right
-l = Nil().prepend(1).prepend(2).prepend(3).prepend(4)
-def smaller(a, b): # our "combine" function
-    return a if a < b else b
-print(l)
-print(l.reduce_right(smaller))
-
-# Testing for_each
-#l = Nil().prepend(1).prepend(2).prepend(3).prepend(4)
-#def square(x):
-#    return x**2
-#print(l)
-#print(l.for_each(square))

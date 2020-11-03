@@ -31,17 +31,13 @@ class LinkedList:
         return(LinkedList(val,self))
 
     def append(self, val):
-        # Make a new node with the value as the head and Nil as the tail, since it will be the new end of the linked list
         new_node = Nil().append(val)
         for i in reversed(range(len(self))):
             new_node = LinkedList(self[i],new_node)
         return(new_node)
 
     def for_each(self, fun):
-        new_node = Nil()
-        for i in reversed(range(len(self))):
-            new_node = new_node.prepend(fun(self[i]))
-        return(new_node)
+        return(LinkedList(fun(self._head), self._tail.for_each(fun)))
 
     def summation(self):
         return self._head + self._tail.summation() if self._tail else self._head
@@ -52,7 +48,10 @@ class LinkedList:
         return smaller(self._head, self._tail.minimum()) if self._tail else self._head
 
     def reduce_right(self, fun):
-        pass # TODO
+        reduced_tail = 0
+        for i in range(len(self._tail)-1):
+            reduced_tail = fun(self._tail[i],self._tail[i+1])
+        return(fun(self._head,reduced_tail))
 
 class Nil():
 
@@ -81,8 +80,17 @@ class Nil():
         return(self)
 
 ### Testing ###
+
+# Testing reduce_right
 l = Nil().prepend(1).prepend(2).prepend(3).prepend(4)
-def square(x):
-    return x**2
+def smaller(a, b): # our "combine" function
+    return a if a < b else b
 print(l)
-print(l.for_each(square))
+print(l.reduce_right(smaller))
+
+# Testing for_each
+#l = Nil().prepend(1).prepend(2).prepend(3).prepend(4)
+#def square(x):
+#    return x**2
+#print(l)
+#print(l.for_each(square))

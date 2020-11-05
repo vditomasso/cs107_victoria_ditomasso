@@ -48,10 +48,10 @@ class LinkedList:
         return smaller(self._head, self._tail.minimum()) if self._tail else self._head
 
     def reduce_right(self, fun):
-        reduced_tail = 0
-        for i in range(len(self._tail)-1):
-            reduced_tail = fun(self._tail[i],self._tail[i+1])
-        return(fun(self._head,reduced_tail))
+        reduced_tail = self._head
+        for i in range(len(self._tail)):
+            reduced_tail = fun(self._tail[i],reduced_tail)
+        return(reduced_tail)
 
 class Nil():
 

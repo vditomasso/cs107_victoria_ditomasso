@@ -20,7 +20,6 @@ def get_list_of_sentences(chapter1='swansway-chapter1.txt'):
 
     return list_of_sentences
 
-
 def longest_sentence():
     list_of_sentences = get_list_of_sentences()
     
@@ -31,5 +30,3 @@ def longest_sentence():
     def larger(a,b):
         return b if b > a else a
     return(sentence_lengths.reduce_right(larger))
-
-

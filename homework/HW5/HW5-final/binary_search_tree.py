@@ -36,13 +36,19 @@ class BSTTable:
     # should return the new root of this subtree
         if node is None:
             node = BSTNode(key, val)
-            node.size = 1
-        elif node.key>key:
-            node.left = BSTNode(key, val)
-            node.size += 1
         else:
-            node.right = BSTNode(key, val)
-            node.size += 1
+            try: # check to see if key is already in the tree
+                if node.left.key == key:
+                    node.left.val = val
+                if node.right.key == key:
+                    node.right.val = val
+            except:
+                if node.key>key:
+                    node.left = BSTNode(key, val)
+                    node.size += 1
+                else:
+                    node.right = BSTNode(key, val)
+                    node.size += 1
         return(node)
 
     def _get(self, node, key):
@@ -66,7 +72,8 @@ greektoroman = BSTTable()
 greektoroman.put('Athena',    'Minerva')
 greektoroman.put('Eros',      'Cupid')
 greektoroman.put('Aphrodite', 'Venus')
-print(greektoroman.get('Eros'))
+#greektoroman.put('Eros',      'Stupid new thing')
+#print(greektoroman.get('Eros'))
 #print(greektoroman._size())
 ## Should print 'Cupid'
 print(greektoroman)

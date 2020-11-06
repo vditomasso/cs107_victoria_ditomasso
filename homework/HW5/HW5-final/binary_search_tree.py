@@ -31,13 +31,10 @@ class BSTTable:
         return self._get(self._root, key)
 
     def _put(self, node, key, val):
-    # self is the BSTTable, ie the BST itself
-    # node is the root of the subtree that you want the key:value pair inserted -> is going to be self._root
-    # should return the new root of this subtree
         if node is None:
             node = BSTNode(key, val)
         else:
-            try: # check to see if key is already in the tree
+            try:
                 if node.left.key == key:
                     node.left.val = val
                 if node.right.key == key:
@@ -52,9 +49,6 @@ class BSTTable:
         return(node)
 
     def _get(self, node, key):
-    # node is the root of the subtree that you're searching -> self._root
-    # return the value associated with key in that subtree
-    # raise a KeyError is no such not is found
         if node.left.key == key:
             return(node.left.val)
         elif node.right.key == key:
@@ -65,15 +59,3 @@ class BSTTable:
     @staticmethod
     def _size(node):
         return node.size if node else 0
-
-### Testing ###
-
-greektoroman = BSTTable()
-greektoroman.put('Athena',    'Minerva')
-greektoroman.put('Eros',      'Cupid')
-greektoroman.put('Aphrodite', 'Venus')
-#greektoroman.put('Eros',      'Stupid new thing')
-#print(greektoroman.get('Eros'))
-#print(greektoroman._size())
-## Should print 'Cupid'
-print(greektoroman)

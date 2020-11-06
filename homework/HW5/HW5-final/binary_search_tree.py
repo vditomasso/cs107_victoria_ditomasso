@@ -46,7 +46,15 @@ class BSTTable:
         return(node)
 
     def _get(self, node, key):
-        pass # TODO
+    # node is the root of the subtree that you're searching -> self._root
+    # return the value associated with key in that subtree
+    # raise a KeyError is no such not is found
+        if node.left.key == key:
+            return(node.left.val)
+        elif node.right.key == key:
+            return(node.right.val)
+        else:
+            raise KeyError('There is no value with key: {} in the subtree with root: {}, {}'.format(key, node.key, node.val))
 
     @staticmethod
     def _size(node):
@@ -56,8 +64,9 @@ class BSTTable:
 
 greektoroman = BSTTable()
 greektoroman.put('Athena',    'Minerva')
-#greektoroman.put('Eros',      'Cupid')
-#greektoroman.put('Aphrodite', 'Venus')
-#print(greektoroman.get('Eros'))
+greektoroman.put('Eros',      'Cupid')
+greektoroman.put('Aphrodite', 'Venus')
+print(greektoroman.get('Eros'))
+#print(greektoroman._size())
 ## Should print 'Cupid'
 print(greektoroman)

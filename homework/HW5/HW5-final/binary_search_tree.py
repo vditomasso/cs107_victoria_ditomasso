@@ -31,7 +31,16 @@ class BSTTable:
         return self._get(self._root, key)
 
     def _put(self, node, key, val):
-        pass # TODO
+    # self is the BSTTable, ie the BST itself
+    # node is the root of the subtree that you want the key:value pair inserted -> is going to be self._root
+    # should return the new root of this subtree
+        if node is None:
+            node = BSTNode(key, val)
+        elif node.key>key:
+            node.left = BSTNode(key, val)
+        else:
+            node.right = BSTNode(key, val)
+        return(node)
 
     def _get(self, node, key):
         pass # TODO
@@ -46,5 +55,6 @@ greektoroman = BSTTable()
 greektoroman.put('Athena',    'Minerva')
 greektoroman.put('Eros',      'Cupid')
 greektoroman.put('Aphrodite', 'Venus')
-print(greektoroman.get('Eros'))
+#print(greektoroman.get('Eros'))
+## Should print 'Cupid'
 print(greektoroman)

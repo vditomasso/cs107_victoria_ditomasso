@@ -50,7 +50,20 @@ class BSTTable:
             return self._get(node.right, key)
         else:
             return node.val
+            
+    def _removemin(self, node):
+        
 
     @staticmethod
     def _size(node):
         return node.size if node else 0
+        
+### Testing ###
+t = BSTTable()
+t.put(5, 'a')
+t.put(1, 'b')
+t.put(2, 'c')
+t.put(0, 'd')
+print(t._root)
+
+print(t._removemin(t._root))

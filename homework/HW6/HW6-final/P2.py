@@ -56,9 +56,24 @@ class Heap:
         return self.size
 
     def heapify(self, idx: int) -> None:
-        # TODO: implement
-        pass
+        # If an index is smaller than its parent, then swap and evaluate the next index
+        
+        comp_idxes = [self.left(idx),self.right(idx)]
+        
+        for comp_idx in comp_idxes:
+            try:
+                if self.elements[idx] > self.elements[comp_idx]:
+                    self.swap(idx, comp_idx)
+                    self.heapify(self.left(idx))
+            except IndexError:
+                pass
 
     def build_heap(self) -> None:
-        # TODO: implement
-        pass
+        for idx in range(self.size//2, 0, -1):
+            self.heapify(idx)
+        
+        
+### Demo ###
+
+h = Heap([-1,0,0,15,23,1,2,3]) # The heap tree will be built during initialization
+print(h)

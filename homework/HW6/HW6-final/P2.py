@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from math import floor
 from typing import List
 
@@ -52,16 +50,16 @@ class Heap:
     def __str__(self) -> str:
         return self.to_string()
 
-    def __len__(self) -> str:
+    def __len__(self) -> int:
         return self.size
 
     def heapify(self, idx: int) -> None:
-        # If an index is smaller than its parent, then swap and evaluate the next index
         comp_idxes = [self.left(idx),self.right(idx)]
 
         for comp_idx in comp_idxes:
             try:
-                if self.elements[idx] > self.elements[comp_idx]:
+                if self.compare(idx,comp_idx):
+#                if self.elements[idx] > self.elements[comp_idx]:
                     self.swap(idx, comp_idx)
                     self.heapify(self.left(idx))
                     self.heapify(self.right(idx))
@@ -71,7 +69,7 @@ class Heap:
     def build_heap(self) -> None:
         for idx in range(self.size-1, -1, -1):
             self.heapify(idx)
-            
+
     def heappush(self, key: int) -> None:
         # inserts a new element into the heap (while maintining its heap-property!)
         elements = self.elements
@@ -80,31 +78,35 @@ class Heap:
         self.size+= 1
         self.build_heap()
 
-            
     def heappop(self) -> int:
-        # this function should remove the heap's minimum element and return it to the caller
+        # this function should remove the heap's first element (min for min heap, max for max heap) and return it to the caller
         # Raise an IndexError when trying to pop from an empty heap
-        if self.size is not 0:
+        if self.size != 0:
             elements = self.elements
-            min_elem = min(elements)
-            elements.remove(min(elements))
+            pop = elements[0]
+            elements.remove(pop)
             self.elements = elements
             self.size -= 1
             self.build_heap()
-            return min_elem
+            return pop
         else:
             raise IndexError("Cannot heappop from an empty heap")
+
+class MinHeap(Heap):
+    def __init__(self, array: List[int]):
+        Heap.__init__(self,array)
+    
+    def compare(self,idx1,idx2):
+        '''idx1: index of the parent
+        idx2: index of the child'''
+        return(self.elements[idx1]>self.elements[idx2])
         
-### Demo ###
 
-h = Heap([-1,0,0,15,23,1,2,3]) # The heap tree will be built during initialization
-print(h)
-
-#h.heappush(-2)
-#print(h)
-##print(left(h(2)))
-#popped = h.heappop()
-#print(popped)
-#print(h)
-
-
+class MaxHeap(Heap):
+    def __init__(self, array: List[int]):
+        Heap.__init__(self,array)
+    
+    def compare(self,idx1,idx2):
+        '''idx1: index of the parent
+        idx2: index of the child'''
+        return(self.elements[idx1]<self.elements[idx2])

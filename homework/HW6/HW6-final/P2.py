@@ -61,7 +61,6 @@ class Heap:
 
         for comp_idx in comp_idxes:
             try:
-                if comp_idx == comp_idxes[0]:
                 if self.elements[idx] > self.elements[comp_idx]:
                     self.swap(idx, comp_idx)
                     self.heapify(self.left(idx))
@@ -77,25 +76,35 @@ class Heap:
         # inserts a new element into the heap (while maintining its heap-property!)
         elements = self.elements
         elements.append(key)
-
         self.elements = elements
         self.size+= 1
-
-        for idx in range(self.size-1, -1, -1):
-            self.heapify(idx)
+        self.build_heap()
 
             
     def heappop(self) -> int:
         # this function should remove the heap's minimum element and return it to the caller
         # Raise an IndexError when trying to pop from an empty heap
-        pass
-        
+        if self.size is not 0:
+            elements = self.elements
+            min_elem = min(elements)
+            elements.remove(min(elements))
+            self.elements = elements
+            self.size -= 1
+            self.build_heap()
+            return min_elem
+        else:
+            raise IndexError("Cannot heappop from an empty heap")
         
 ### Demo ###
 
 h = Heap([-1,0,0,15,23,1,2,3]) # The heap tree will be built during initialization
+print(h)
+
+#h.heappush(-2)
+#print(h)
+##print(left(h(2)))
+#popped = h.heappop()
+#print(popped)
 #print(h)
 
-h.heappush(-2)
-print(h)
-#print(left(h(2)))
+

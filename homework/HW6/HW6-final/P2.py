@@ -57,23 +57,45 @@ class Heap:
 
     def heapify(self, idx: int) -> None:
         # If an index is smaller than its parent, then swap and evaluate the next index
-        
         comp_idxes = [self.left(idx),self.right(idx)]
-        
+
         for comp_idx in comp_idxes:
             try:
+                if comp_idx == comp_idxes[0]:
                 if self.elements[idx] > self.elements[comp_idx]:
                     self.swap(idx, comp_idx)
                     self.heapify(self.left(idx))
+                    self.heapify(self.right(idx))
             except IndexError:
                 pass
 
     def build_heap(self) -> None:
-        for idx in range(self.size//2, 0, -1):
+        for idx in range(self.size-1, -1, -1):
             self.heapify(idx)
+            
+    def heappush(self, key: int) -> None:
+        # inserts a new element into the heap (while maintining its heap-property!)
+        elements = self.elements
+        elements.append(key)
+
+        self.elements = elements
+        self.size+= 1
+
+        for idx in range(self.size-1, -1, -1):
+            self.heapify(idx)
+
+            
+    def heappop(self) -> int:
+        # this function should remove the heap's minimum element and return it to the caller
+        # Raise an IndexError when trying to pop from an empty heap
+        pass
         
         
 ### Demo ###
 
 h = Heap([-1,0,0,15,23,1,2,3]) # The heap tree will be built during initialization
+#print(h)
+
+h.heappush(-2)
 print(h)
+#print(left(h(2)))

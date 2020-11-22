@@ -37,6 +37,42 @@ def mergesortedlists(lists, pqclass=PriorityQueue):
 
     return merged
 
+class NaivePriorityQueue(PriorityQueue):
+    def __init__(self, max_size):
+        PriorityQueue.__init__(self, max_size)
+        
+    def put(self,val):
+    # put should take in a value val and insert it at the end of the elements list.
+    # This method should raise an IndexError if called after max_size is reached. Nothing should be returned.
+        if len(self) < self.max_size:
+            elements = self.elements
+            elements.append(val)
+            self.elements = elements
+        else:
+            raise IndexError('Queue is already at maximum length, cannot put another element.')
+    
+    def get(self):
+    # get should remove the smallest value from elements and return it.
+    # raise an IndexError if called on an empty priority queue
+        if len(self)>0:
+            elements = self.elements
+            min_elem = min(elements)
+            elements.remove(min_elem)
+            self.elements = elements
+            return(min_elem)
+        else:
+            raise IndexError('Queue is empty, cannot perform get on an empty queue.')
+            
+    
+    def peek(self):
+    # peek should return the smallest value in the queue.
+    # raise an IndexError if called on an empty priority queue
+        if len(self)>0:
+            elements = self.elements
+            min_elem = min(elements)
+            return(min_elem)
+        else:
+            raise IndexError('Queue is empty, cannot perform peek from an empty queue.')
 
 def generatelists(n, length=20, dictionary_path='../data/words.txt'):
     with open(dictionary_path, 'r') as f:
@@ -59,3 +95,17 @@ def timeit(ns=(10, 20, 50, 100, 200, 500), pqclass=PriorityQueue, n_average=5):
             timeaccum += end-start
         elapsed.append(timeaccum / n_average)
     return elapsed
+
+### Demo ###
+q = NaivePriorityQueue(2)
+q.put(1)
+q.put(2)
+print(q.peek())
+
+print(q.get())
+print(q.get())
+#print(q.elements)
+
+print(q.get())
+
+

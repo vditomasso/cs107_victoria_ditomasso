@@ -163,19 +163,3 @@ def timeit(ns=(10, 20, 50, 100, 200, 500), pqclass=PriorityQueue, n_average=5):
         elapsed.append(timeaccum / n_average)
     return elapsed
 
-### Demo ###
-q = HeapPriorityQueue(2)
-q.put(1)
-q.put(2)
-#print(q.elements)
-print(q.peek())
-#
-#print(q.elements)
-
-print(q.get())
-print(q.get())
-#print(q.elements)
-#
-print(q.get())
-#
-

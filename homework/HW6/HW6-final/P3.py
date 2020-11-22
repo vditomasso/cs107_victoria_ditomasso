@@ -141,7 +141,7 @@ class PythonHeapPriorityQueue(PriorityQueue):
         else:
             raise IndexError('Queue is empty, cannot perform peek from an empty queue.')
         
-def generatelists(n, length=20, dictionary_path='../data/words.txt'):
+def generatelists(n, length=20, dictionary_path='./words.txt'):
     with open(dictionary_path, 'r') as f:
         words = [w.strip() for w in f.readlines()]
     lists = []

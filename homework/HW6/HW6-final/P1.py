@@ -53,15 +53,6 @@ class BSTTable:
             
     def _removemin(self, node):
         '''I think it's ok that this can't handle when node.left.left does not exist, because that would mean the tree only has 1 node & what would it mean to remove the minimum node from a tree with only one node?'''
-#        if node.left is None:
-#            node = None
-##            node.key, node.val, node.size, node.right, node.left = None, None, None, None, None
-#        else:
-#            print('\n _removemin node.left= \n',node.left,)
-#            return(self._removemin(node.left))
-#        print('\nnode after=\n',node)
-#        return(self)
-        
         if node.left.left is not None:
             node.size = node.size-1
             return(self._removemin(node.left))
@@ -136,19 +127,22 @@ class BSTTable:
                     else:
                         print('Neither node.left nor node.right are not None')
 
-                # if it has two chidren, replace it with the minimum value in the right subtree, and delete that node
+                # If there's no right subtree, find the highest value in the left subtree
                 elif node.size > 2:
                     print('\n node.size>2')
 
                     if node.right is None:
-                        print('\nnode.right is None')
-                        # save the info about the node's left child
-                        node_left_key, node_left_val, node_left_size = node.left.key, node.left.val, node.left.size
-                        # remove the node's left child by its key
-                        self._remove(node,node_left_key)
-                        # replace the node with its left child (now deleted)
-                        node.key, node.val = node_left_key, node_left_val
-                        node.size = node_left_size
+                        # find the max in the node's left subtree
+                        node_max = node.left
+                        while node_max.right is not None:
+                            node_max = node_max.right
+                        # save info about node_max (on left subtree) to replace node with later
+                        node_max_key, node_max_val = node_max.key, node_max.val
+                        print('\nnode_max_key, node_max_val=',node_max_key, node_max_val)
+                        # delete the maximum node in the current node's right subtree
+                        self._remove(node,node_max_key)
+                        # replace node with node_max's key and val
+                        node.key, node.val = node_max_key, node_max_val
                         return(self)
 
                     # if the node has a right subtree, find the minimum node, delete it & replace the current node with that minimum node
@@ -162,7 +156,7 @@ class BSTTable:
                         # delete the minimum node in the current node's right subtree
                         self._remove(node,node_min_key)
                         # replace node with node_min's key and val
-                        node.key, node.val = node_min.key, node_min.val
+                        node.key, node.val = node_min_key, node_min_val
                         return(self)
 
         else:
@@ -172,56 +166,3 @@ class BSTTable:
     def _size(node):
         return node.size if node else 0
         
-### Testing for removemin ###
-#t = BSTTable()
-#t.put(5, 'a')
-#t.put(1, 'b')
-#t.put(2, 'c')
-#t.put(0, 'd')
-#print('\n t._root=\n',t._root)
-#print('t._removemin(t._root)=\n',t._removemin(t._root))
-
-#### Testing for remove ###
-
-#t = BSTTable()
-#t.put(5, 'a')
-#t.put(1, 'b')
-#t.put(2, 'c')
-#t.put(0, 'd')
-#
-#print('\n t._root=\n',t._root)
-#
-##print(t._root.size)
-#
-##print('t=\n',t)
-#
-#print('\n t._remove(t._root, 5)=\n',t._remove(t._root, 5))
-#
-##print('t._remove(t._remove(t._root, 5), 1)=\n',t._remove(t._remove(t._root, 5), 1))
-##
-##print('t._remove(t._root, 10)=\n',t._remove(t._root, 10))
-
-### Testing for remove from piazza ###
-#t = BSTTable()
-#t.put(5, 'a')
-#t.put(1, 'b')
-#t.put(2, 'c')
-#t.put(0, 'd')
-#
-#print(t._remove(t._root, 5))
-#
-#print(t._remove(t._root, 1))
-
-### my own tests for remove ###
-t = BSTTable()
-t.put(5, 'a')
-t.put(1, 'b')
-t.put(2, 'c')
-t.put(0,'d')
-t.put(-1,'e')
-t.put(-2,'f')
-
-#print('\nt=',t)
-#print('\nt._remove(t._root,2)=',t._remove(t._root,2))
-#print('\nt._remove(t._root,1)=',t._remove(t._root,1))
-print(t._remove(t._root,10))

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from enum import Enum
+import numpy as np
 
 class BSTNode:
 
@@ -165,4 +167,85 @@ class BSTTable:
     @staticmethod
     def _size(node):
         return node.size if node else 0
+         
+class DFSTraversalTypes(Enum):
+    PREORDER = 1
+    INORDER = 2
+    POSTORDER = 3
+
+class DFSTraversal():
+    def __init__(self, tree: BSTTable, traversalType: DFSTraversalTypes):
+        self.bst = tree
+        self.traversalType = traversalType
+        self.returned = []
+        self.node = self.bst._root
+#        self.index = 0
+#        self.visited = np.zeros(len(self.bst))
+
+    def __iter__(self):
+#        self.node = self.bst._root
+#        print('\nself in __iter__\n',self)
+#        print('\nself.node in __iter__\n',self.node)
+        return self
+
+    def __next__(self):
+        if self.traversalType == DFSTraversalTypes.PREORDER:
+            return(self.preorder(self.bst))
+        elif self.traversalType == DFSTraversalTypes.INORDER:
+            return(self.inorder(self.bst))
+        elif self.traversalType == DFSTraversal.POSTORDER:
+            return(self.postorder(self.bst))
+        else:
+            raise AttributeError('self.traversalType must be a DFSTraversalType')
+            
+    def inorder(self, bst: BSTTable):
         
+#        print(self.node at the start )
+#        print('\nself.node at start of inorder\n', self.node)
+        
+        if len(self.returned) == len(self.bst):
+            raise StopIteration
+
+        if isinstance(self.node.left,BSTNode) and self.node.left.key not in self.returned:
+#            print('left')
+#            print(self.node)
+            current_node = self.node
+            self.node = current_node.left
+#            print(self.node)
+            return(self.inorder(self.bst))
+            
+        elif self.node.key not in self.returned:
+#            print('current')
+            self.returned.append(self.node.key)
+            return(self.node)
+            
+        elif self.node.right is not None and self.node.right.key not in self.returned:
+#            print('right')
+            self.node = self.node.right
+            return(self.inorder(self.bst))
+            
+        else:
+#            print(self.returned)
+            self.node = self.bst._root
+            return(self.inorder(self.bst))
+        
+    def preorder(self, bst: BSTTable):
+        return
+
+    def postorder(self, bst: BSTTable):
+        # TODO: implement
+        pass
+#        return
+        
+### Testing DFSTraversal ###
+
+input_array = [(4, 'a'), (9, 'c'), (2, 'f'), (3, 'z'), (11, 'i'), (8, 'r')]
+bst = BSTTable()
+for key, val in input_array:
+    bst.put(key, val)
+#print(bst)
+traversal = DFSTraversal(bst, DFSTraversalTypes.PREORDER)
+for node in traversal:
+    print(str(node.key) + ', ' + node.val)
+
+    

@@ -54,8 +54,8 @@ class BSTTable:
     def _removemin(self, node):
         '''I think it's ok that this can't handle when node.left.left does not exist, because that would mean the tree only has 1 node & what would it mean to remove the minimum node from a tree with only one node?'''
 #        if node.left is None:
-##            node = None
-#            node.key, node.val, node.size, node.right, node.left = None, None, None, None, None
+#            node = None
+##            node.key, node.val, node.size, node.right, node.left = None, None, None, None, None
 #        else:
 #            print('\n _removemin node.left= \n',node.left,)
 #            return(self._removemin(node.left))
@@ -81,82 +81,94 @@ class BSTTable:
         # TODO: Should return a subtree whose root is  but without
         #       the node whose key is
         
-        print('\n node, key at the start of _remove= \n',node,'\nkey = ',key)
+#        print('\n node, key at the start of _remove= \n',node,'\nkey = ',key)
+        print('\nnode at the start of _remove',node)
+        print('\nkey',key)
         
+        ### This code block handles removal of a leaf ###
         if isinstance(node, BSTNode):
-        
+#            print('\nnode is a BSTNode')
             # make a special case for when the child of the node is the key and that child has no children
             if isinstance(node.right, BSTNode):
                 if node.right.key==key and node.right.size==1:
+                    print('\nnode.right.key==key')
                     node.right = None
+                    node.size = node.size - 1
+                    return(self)
                   
             if isinstance(node.left, BSTNode):
                 if node.left.key==key and node.left.size==1:
+                    print('\nnode.left.key==key')
                     node.left = None
-        
+                    node.size = node.size - 1
+                    return(self)
+                        
             if node.key < key:
+                print('\nnode.key < key')
                 node = node.right
+                node.size = node.size - 1
                 return(self._remove(node, key))
 
             elif node.key > key:
+                print('\nnode.key > key')
                 node = node.left
+                node.size = node.size - 1
                 return(self._remove(node,key))
+        ### End of code block that handles removing a leaf
                 
-            elif node.key == key:
+        ### Replace a node (the current node) -- not a leaf
+#            elif node.key == key:
+#
+#                # if it has one child, replace it with its child
+#                if node.size == 2:
+#                    elif node.right is not None:
+#                        node.key, node.val = node.right.key, node.right.val
+#                    if node.left is not None:
+#                        node.key, node.val = node.left.key, node.left.val
+#                    else:
+#                        print('Neither node.left nor node.right are not None')
+#
+#                # if it has two chidren, replace it with the minimum value in the right subtree, and delete that node
+#                elif node.size > 2:
+#
+##                    print('\n node.size>2 \n')
+##                    print('\n node= \n',node)
+#
+#                    if node.right is None:
+##                        print('\n node when node.right is None= \n',node)
+#
+#                        # save the info about the node's left child
+#                        node_left_key, node_left_val, node_left_size = node.left.key, node.left.val, node.left.size
+#
+##                        print('\n node_left info= \n',node_left_key, node_left_val, node_left_size)
+##                        print('\n node before _remove in function \n',node)
+#                        # remove the node's left child by its key
+#                        self._remove(node,node_left_key)
+#                        # replace the node with its left child (now deleted)
+#                        node.key, node.val = node_left_key, node_left_val
+#                        node.size = node_left_size
+#
+#                    # if the node has a right subtree, find the minimum node, delete it & replace the current node with that minimum node
+#                    else:
+#                        node_min = node.right
+#                        while node_min.left is not None:
+#                            node_min = node_min.left
+#
+#                        # save info about node_min (on right subtree) to replace node with later
+#                        node_min_key, node_min_val = node_min.key, node_min.val
+##                        print('\n node.right before deleting the minimum node in the current nodes right subtree \n',node.right)
+#                        # delete the minimum node in the current node's right subtree
+#                        self._remove(node,node_min_key)
+#                        # replace node with node_min's key and val
+#                        node.key, node.val = node_min.key, node_min.val
+#
+#                else:
+#                    raise KeyError
+#
+#        else:
+#            pass
 
-                # if it has no children, just remove it
-#                if node.size == 1:
-##                    node = None
-#                    node.key, node.val, node.size, node.right, node.left = None, None, None, None, None
-
-                # if it has one child, replace it with its child
-                if node.size == 2:
-                    if node.left is not None:
-                        node.key, node.val = node.left.key, node.left.val
-                    elif node.right is not None:
-                        node.key, node.val = node.right.key, node.right.val
-                    else:
-                        print('Neither node.left nor node.right are not None')
-                        
-                # if it has two chidren, replace it with the minimum value in the right subtree, and delete that node
-                elif node.size > 2:
-
-                    print('\n node.size>2 \n')
-#                    print('\n node= \n',node)
-
-                    if node.right is None:
-#                        print('\n node when node.right is None= \n',node)
-                    
-                        # save the info about the node's left child
-                        node_left_key, node_left_val, node_left_size = node.left.key, node.left.val, node.left.size
-                        
-                        print('\n node_left info= \n',node_left_key, node_left_val, node_left_size)
-#                        print('\n node before _remove in function \n',node)
-                        # remove the node's left child by its key
-                        self._remove(node,node_left_key)
-                        # replace the node with its left child (now deleted)
-                        node.key, node.val = node_left_key, node_left_val
-                        node.size = node_left_size
-                        
-                    # if the node has a right subtree, find the minimum node, delete it & replace the current node with that minimum node
-                    else:
-                        node_min = node.right
-                        while node_min.left is not None:
-                            node_min = node_min.left
-
-                        # save info about node_min (on right subtree) to replace node with later
-                        node_min_key, node_min_val = node_min.key, node_min.val
-                        print('\n node.right before deleting the minimum node in the current nodes right subtree \n',node.right)
-                        # delete the minimum node in the current node's right subtree
-                        self._remove(node,node_min_key)
-                        # replace node with node_min's key and val
-                        node.key, node.val = node_min.key, node_min.val
-                                    
-            else:
-                raise KeyError
-
-        else:
-            pass
+#########################################################
 
 
 #    def _remove(self, node, key):
@@ -430,5 +442,24 @@ class BSTTable:
 ##
 ##print('t._remove(t._root, 10)=\n',t._remove(t._root, 10))
 
-### my own testing for remove ###
+### Testing for remove from piazza ###
+#t = BSTTable()
+#t.put(5, 'a')
+#t.put(1, 'b')
+#t.put(2, 'c')
+#t.put(0, 'd')
+#
+#print(t._remove(t._root, 5))
+#
+#print(t._remove(t._root, 1))
+
+### my own tests for remove ###
+t = BSTTable()
+t.put(5, 'a')
+t.put(1, 'b')
+t.put(2, 'c')
+
+#print('\nt=',t)
+#print('\nt._remove(t._root,1)=',t._remove(t._root,1))
+print('\nt._remove(t._root,2)=',t._remove(t._root,2))
 

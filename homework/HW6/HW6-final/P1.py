@@ -193,7 +193,7 @@ class DFSTraversal():
             return(self.preorder(self.bst))
         elif self.traversalType == DFSTraversalTypes.INORDER:
             return(self.inorder(self.bst))
-        elif self.traversalType == DFSTraversal.POSTORDER:
+        elif self.traversalType == DFSTraversalTypes.POSTORDER:
             return(self.postorder(self.bst))
         else:
             raise AttributeError('self.traversalType must be a DFSTraversalType')
@@ -209,8 +209,8 @@ class DFSTraversal():
         if isinstance(self.node.left,BSTNode) and self.node.left.key not in self.returned:
 #            print('left')
 #            print(self.node)
-            current_node = self.node
-            self.node = current_node.left
+#            current_node = self.node
+            self.node = self.node.left
 #            print(self.node)
             return(self.inorder(self.bst))
             
@@ -219,7 +219,7 @@ class DFSTraversal():
             self.returned.append(self.node.key)
             return(self.node)
             
-        elif self.node.right is not None and self.node.right.key not in self.returned:
+        elif isinstance(self.node.right,BSTNode) and self.node.right.key not in self.returned:
 #            print('right')
             self.node = self.node.right
             return(self.inorder(self.bst))
@@ -230,13 +230,53 @@ class DFSTraversal():
             return(self.inorder(self.bst))
         
     def preorder(self, bst: BSTTable):
-        return
 
+#        print('\nnode at start\n',self.node)
+
+        if len(self.returned) == len(self.bst):
+            raise StopIteration
+
+        if self.node.key not in self.returned:
+#            print('current')
+            self.returned.append(self.node.key)
+            return(self.node)
+
+        elif isinstance(self.node.left,BSTNode) and self.node.left.key not in self.returned:
+#            print('left')
+            self.node = self.node.left
+            return(self.preorder(self.bst))
+            
+        elif isinstance(self.node.right,BSTNode) and self.node.right.key not in self.returned:
+#            print('right')
+            self.node = self.node.right
+            return(self.preorder(self.bst))
+            
+        else:
+            self.node = self.bst._root.right
+            return(self.preorder(self.bst))
+            
     def postorder(self, bst: BSTTable):
-        # TODO: implement
-        pass
-#        return
-        
+    
+        if len(self.returned) == len(self.bst):
+            raise StopIteration
+            
+        if isinstance(self.node.left,BSTNode) and self.node.left.key not in self.returned:
+            self.node = self.node.left
+            return(self.postorder(self.bst))
+            
+        elif isinstance(self.node.right,BSTNode) and self.node.right.key not in self.returned:
+#            print('right')
+            self.node = self.node.right
+            return(self.postorder(self.bst))
+
+        elif self.node.key not in self.returned:
+            self.returned.append(self.node.key)
+            return(self.node)
+            
+        else:
+            self.node = self.bst._root
+            return(self.postorder(self.bst))
+
 ### Testing DFSTraversal ###
 
 input_array = [(4, 'a'), (9, 'c'), (2, 'f'), (3, 'z'), (11, 'i'), (8, 'r')]

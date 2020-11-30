@@ -3,10 +3,10 @@
 import numpy as np
 
 class Markov:
-    def __init__(self, day_zero_weather='sunny',n=100):
+    def __init__(self, day_zero_weather=None):
         self.data = np.empty(0)
         self.day_zero_weather = day_zero_weather
-        self.n = n
+#        self.n = n
         
     def load_data(self, file_path = './weather.csv'):
         self.data = np.genfromtxt(file_path,delimiter=',')
@@ -19,7 +19,21 @@ class Markov:
             print('current_day_weather and next_day_weather must be one of the following strings:\n   sunny\n   cloudy\n   rainy\n   snowy\n   widny\n   hailing\nNot: {} and {}'.format(current_day_weather,next_day_weather))
             
     def __iter__(self):
-        return MarkovIterator(self, self.n, self.day_zero_weather)
+        return MarkovIterator(self, self.day_zero_weather)
+        
+    def _simulate_weather_for_day(self, day):
+        # This method returns the predicted weather as a string on the specified day.
+        # Make sure that your method returns a sensible result (i.e. the current day's weather) for day = 0
+        forecast = []
+        for i in self:
+            forecast.append(i)
+        try:
+            return forecast[day]
+        except TypeError:
+            print('day must be an int, not {}'.format(type(day)))
+
+#    def get_weather_for_day(self, day, trials):
+#        # Returns list of strings of length trials where each element is the predicted weather for each trial. Assign a default value to trials. day is an integer representing how far from the current day we want to predict the weather. For example, if day=3, then we want to predict the weather on day 3
 
 class MarkovIterator():
 
@@ -29,7 +43,7 @@ class MarkovIterator():
     global index_dict
     index_dict = {v: k for k, v in weather_dict.items()}
 
-    def __init__(self, Markov, n, day_zero_weather):
+    def __init__(self, Markov, day_zero_weather, n=14):
 #        self.load_data(self)
         # n is the nth day whose weather you're trying to find
         self.n = n
@@ -49,7 +63,8 @@ class MarkovIterator():
     
     def __next__(self):
     # return the next day's weather and add it to the forecast list
-        if len(self.forecast) == self.n+1:
+        if len(self.forecast) == self.n+2:
+#            print('StopIteration')
             raise StopIteration
         else:
         # get the probability of each possible weather forecast, based on the most recent weather
@@ -64,10 +79,11 @@ class MarkovIterator():
 #            print('next_day_index:',next_day_index)
             next_day_weather = index_dict[next_day_index[0]]
             self.forecast.append(next_day_weather)
-            return(next_day_weather)
+            return(current_day_weather)
     
 ### Testing ###
-#weather_today = Markov(n=5)
-#weather_today.load_data(file_path='./weather.csv')
+weather_today = Markov('sunny')
+weather_today.load_data(file_path='./weather.csv')
 #for i in weather_today:
 #    print(i)
+#print(weather_today._simulate_weather_for_day(0))

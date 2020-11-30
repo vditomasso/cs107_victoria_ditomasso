@@ -32,8 +32,13 @@ class Markov:
         except TypeError:
             print('day must be an int, not {}'.format(type(day)))
 
-#    def get_weather_for_day(self, day, trials):
+    def get_weather_for_day(self, day, trials):
 #        # Returns list of strings of length trials where each element is the predicted weather for each trial. Assign a default value to trials. day is an integer representing how far from the current day we want to predict the weather. For example, if day=3, then we want to predict the weather on day 3
+        predictions = []
+        for trial in range(trials):
+            prediction = self._simulate_weather_for_day(day)
+            predictions.append(prediction)
+        return predictions
 
 class MarkovIterator():
 
@@ -87,3 +92,4 @@ weather_today.load_data(file_path='./weather.csv')
 #for i in weather_today:
 #    print(i)
 #print(weather_today._simulate_weather_for_day(0))
+#print(weather_today.get_weather_for_day(3,15))

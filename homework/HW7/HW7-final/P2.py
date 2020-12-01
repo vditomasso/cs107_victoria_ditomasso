@@ -16,7 +16,7 @@ cursor.execute('''CREATE TABLE model_params (
                 id INTEGER NOT NULL,
                 desc TEXT,
                 param_name TEXT,
-                value REAL)''')
+                value BLOB)''')
 
 db.commit()
 
@@ -24,15 +24,15 @@ cursor.execute('''CREATE TABLE model_coefs (
                 id INTEGER NOT NULL,
                 desc TEXT,
                 feature_name TEXT,
-                value REAL)''')
+                value BLOB)''')
 
 db.commit()
 
 cursor.execute('''CREATE TABLE model_results (
                 id INTEGER NOT NULL,
                 desc TEXT,
-                train_score,
-                test_score)''')
+                train_score REAL,
+                test_score REAL)''')
                 
 db.commit()
 
@@ -70,3 +70,27 @@ def save_to_database(model_id, model_desc, db, model, X_train, X_test, y_train, 
     intercept = regr.intercept_ # array (len 1) containing a float
     train_score = regr.score(X_train, y_train) # float
     test_score = regr.score(X_test, y_test) # float
+    
+    # get ready to add to the db
+    cursor = db.cursor()
+    
+    # add to model_params table
+    for key, value in params.items():
+        cursor.execute('''INSERT INTO model_params (id, desc, param_name, value) VALUES (?, ?, ?, ?)''',
+                        model_id, model_desc, key, value)
+
+    # add to model_coefs table
+    for feature, coef_val in zip(X_train.columns, coef[0])
+        cursor.execute('''INSERT INTO model_coefs (id, desc, feature_name, value) VALUES (?, ?, ?, ?)''',
+                        model_id, model_desc+' coef', feature, coef_val)
+                        
+    cursor.execute('''INSERT INTO model_coefs (id, desc, feature_name, value) VALUES (?, ?, ?, ?)''',
+                    model_id, model_desc+' intercept', 'intercept(all)', intercept[0])
+                    
+    # add to model_results
+    cursor.execute('''INSERT INTO model_results (id, desc, train_score, test_score) VALUES (?, ?, ?, ?)''',
+                    model_id, model_desc, train_score, test_score)
+                    
+    db.commit()
+    
+    return(db)

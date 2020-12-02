@@ -65,9 +65,6 @@ def save_to_database(model_id, model_desc, db, model, X_train, X_test, y_train, 
     - model_coefs table, with coefficients and intercept values of the fitted model
     - model_results: train and validation accuracy obtained from the score method'''
     
-#    regr = LogisticRegression()
-#    regr.fit(X_train, y_train)
-    
     params = model.get_params() # dict, len 15
     coef = model.coef_ # array (len 1) of array (len 30)
     intercept = model.intercept_ # array (len 1) containing a float
@@ -97,6 +94,8 @@ def save_to_database(model_id, model_desc, db, model, X_train, X_test, y_train, 
     db.commit()
     
 #    return(db)
+
+#################################
 
 ### Creating the regression.sqlite using code from assignment ###
 
@@ -130,3 +129,52 @@ penalized_model = LogisticRegression(solver='liblinear', penalty='l1', random_st
 penalized_model.fit(X_train, y_train)
 
 save_to_database(3, 'L1 penalty model', db, penalized_model, X_train, X_test, y_train, y_test)
+
+#################################
+
+### Database Queries ###
+
+# id of the best model and the corresponding test score
+
+best_model = cursor.execute('''SELECT id, test_score
+                    FROM model_results
+                    ORDER BY test_score DESC
+                    LIMIT 1''').fetchall()
+
+print('Best model id: ',best_model[0][0])
+print('Best validation score: ',best_model[0][1])
+
+# Print the feature names and the corresponding coefficients of that model
+
+features_best_model = cursor.execute('''SELECT feature_name, value
+                        FROM model_coefs
+                        WHERE id=3''').fetchall()
+                        
+for feature in features_best_model:
+    print('{}: {}'.format(feature[0],feature[1]))
+    
+# Use the coefficients extracted from the best model to reproduce the test score (accuracy) of the best performing model (as stored in the database)
+
+test_model = LogisticRegression(solver='liblinear')
+test_model.fit(X_train, y_train)
+
+coefs_best_model = cursor.execute('''SELECT value
+                        FROM model_coefs
+                        WHERE id=3
+                        AND feature_name != "intercept(all)"''').fetchall()
+
+intercept_best_model = cursor.execute('''SELECT value
+                        FROM model_coefs
+                        WHERE id=3
+                        AND feature_name = "intercept(all)"''').fetchall()
+
+# Manually change fit parameters
+test_model.coef_ = np.array([coefs_best_model])
+test_model.intercept_ = np.array([intercept_best_model])
+
+test_score = test_model.score(X_test, y_test)
+print(f'Reproduced best validation score: {test_score}')
+
+#################################
+
+db.close()

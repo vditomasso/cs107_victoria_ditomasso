@@ -40,4 +40,4 @@ print('----------------------------------')
 
 for key, city_forecast_dict in zip(city_weather.keys(), city_forecast_dicts):
     Keymax = max(city_forecast_dict, key=city_forecast_dict.get)
-    print(key, ':', Keymax)
+    print('{}: {}'.format(key,Keymax))

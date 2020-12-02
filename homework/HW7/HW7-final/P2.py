@@ -10,6 +10,9 @@ from sklearn.datasets import load_breast_cancer
 
 db = sqlite3.connect('regression.sqlite')
 cursor = db.cursor()
+cursor.execute("DROP TABLE IF EXISTS model_params")
+cursor.execute("DROP TABLE IF EXISTS model_coefs")
+cursor.execute("DROP TABLE IF EXISTS model_results")
 cursor.execute("PRAGMA foreign_keys=1")
 
 cursor.execute('''CREATE TABLE model_params (
@@ -62,14 +65,14 @@ def save_to_database(model_id, model_desc, db, model, X_train, X_test, y_train, 
     - model_coefs table, with coefficients and intercept values of the fitted model
     - model_results: train and validation accuracy obtained from the score method'''
     
-    regr = LogisticRegression()
-    regr.fit(X_train, y_train)
+#    regr = LogisticRegression()
+#    regr.fit(X_train, y_train)
     
-    params = regr.get_params() # dict, len 15
-    coef = regr.coef_ # array (len 1) of array (len 30)
-    intercept = regr.intercept_ # array (len 1) containing a float
-    train_score = regr.score(X_train, y_train) # float
-    test_score = regr.score(X_test, y_test) # float
+    params = model.get_params() # dict, len 15
+    coef = model.coef_ # array (len 1) of array (len 30)
+    intercept = model.intercept_ # array (len 1) containing a float
+    train_score = model.score(X_train, y_train) # float
+    test_score = model.score(X_test, y_test) # float
     
     # get ready to add to the db
     cursor = db.cursor()
@@ -77,20 +80,53 @@ def save_to_database(model_id, model_desc, db, model, X_train, X_test, y_train, 
     # add to model_params table
     for key, value in params.items():
         cursor.execute('''INSERT INTO model_params (id, desc, param_name, value) VALUES (?, ?, ?, ?)''',
-                        model_id, model_desc, key, value)
+                        (model_id, model_desc, key, value))
 
     # add to model_coefs table
-    for feature, coef_val in zip(X_train.columns, coef[0])
+    for feature, coef_val in zip(X_train.columns, coef[0]):
         cursor.execute('''INSERT INTO model_coefs (id, desc, feature_name, value) VALUES (?, ?, ?, ?)''',
-                        model_id, model_desc+' coef', feature, coef_val)
+                        (model_id, model_desc, feature, coef_val))
                         
     cursor.execute('''INSERT INTO model_coefs (id, desc, feature_name, value) VALUES (?, ?, ?, ?)''',
-                    model_id, model_desc+' intercept', 'intercept(all)', intercept[0])
+                    (model_id, model_desc, 'intercept(all)', intercept[0]))
                     
     # add to model_results
     cursor.execute('''INSERT INTO model_results (id, desc, train_score, test_score) VALUES (?, ?, ?, ?)''',
-                    model_id, model_desc, train_score, test_score)
+                    (model_id, model_desc, train_score, test_score))
                     
     db.commit()
     
-    return(db)
+#    return(db)
+
+### Creating the regression.sqlite using code from assignment ###
+
+## Baseline logistic regression model
+
+# Fit model
+baseline_model = LogisticRegression(solver='liblinear')
+baseline_model.fit(X_train, y_train)
+
+save_to_database(1, 'Baseline model', db, baseline_model, X_train, X_test, y_train, y_test)
+
+## Reduced logistic regression model
+
+feature_cols = ['mean radius',
+                'texture error',
+                'worst radius',
+                'worst compactness',
+                'worst concavity']
+
+X_train_reduced = X_train[feature_cols]
+X_test_reduced = X_test[feature_cols]
+
+reduced_model = LogisticRegression(solver='liblinear')
+reduced_model.fit(X_train_reduced, y_train)
+
+save_to_database(2, 'Reduced model', db, reduced_model, X_train_reduced, X_test_reduced, y_train, y_test)
+
+## Logistic regression model with L1 penalty
+
+penalized_model = LogisticRegression(solver='liblinear', penalty='l1', random_state=87, max_iter=150)
+penalized_model.fit(X_train, y_train)
+
+save_to_database(3, 'L1 penalty model', db, penalized_model, X_train, X_test, y_train, y_test)
